@@ -43,6 +43,7 @@ namespace Vaquinha.AutomatedUITests
 			// Assert
 			webElement.Displayed.Should().BeTrue(because:"logo exibido");
 		}
+		
 		[Fact]
 		public void DoacaoUI_CriacaoDoacao()
 		{
@@ -58,7 +59,45 @@ namespace Vaquinha.AutomatedUITests
 			webElement = _driver.FindElement(By.ClassName("btn-yellow"));
 			webElement.Click();
 
-			//Assert
+			// Assert
+			_driver.Url.Should().Contain("/Doacoes/Create");
+		}
+
+		[Fact]
+		public void DoacaoUI_PreenchimentoDoeAgora()
+		{
+			//Arrange
+			var doacao = _doacaoFixture.DoacaoValida();
+            doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+			_driverFactory.NavigateToUrl("https://vaquinha.azurewebsites.net/");
+			_driver = _driverFactory.GetWebDriver();
+
+			//Act
+			IWebElement webElement = null;
+			webElement = _driver.FindElement(By.ClassName("btn-yellow"));
+			webElement.Click();
+
+			// Página Doe Agora
+			_driver.FindElement(By.Id("valor")).SendKeys("50");
+
+			_driver.FindElement(By.Id("DadosPessoais_Nome")).SendKeys(doacao.DadosPessoais.Nome);
+			_driver.FindElement(By.Id("DadosPessoais_Email")).SendKeys(doacao.DadosPessoais.Email);
+			_driver.FindElement(By.Id("DadosPessoais_Nome")).SendKeys(doacao.DadosPessoais.Nome);
+
+			_driver.FindElement(By.Id("EnderecoCobranca_TextoEndereco")).SendKeys(doacao.EnderecoCobranca.TextoEndereco);
+			_driver.FindElement(By.Id("EnderecoCobranca_Numero")).SendKeys(doacao.EnderecoCobranca.Numero);
+			_driver.FindElement(By.Id("EnderecoCobranca_Cidade")).SendKeys(doacao.EnderecoCobranca.Cidade);
+			_driver.FindElement(By.Id("estado")).SendKeys(doacao.EnderecoCobranca.Estado);
+			_driver.FindElement(By.Id("cep")).SendKeys(doacao.EnderecoCobranca.CEP);
+			_driver.FindElement(By.Id("telefone")).SendKeys(doacao.EnderecoCobranca.Telefone);
+
+			_driver.FindElement(By.Id("FormaPagamento_NomeTitular")).SendKeys(doacao.FormaPagamento.NomeTitular);
+		  _driver.FindElement(By.Id("cardNumber")).SendKeys(doacao.FormaPagamento.NumeroCartaoCredito);
+			_driver.FindElement(By.Id("validade")).SendKeys(doacao.FormaPagamento.Validade);
+			_driver.FindElement(By.Id("cvv")).SendKeys(doacao.FormaPagamento.CVV);
+
+			// Assert
 			_driver.Url.Should().Contain("/Doacoes/Create");
 		}
 	}
