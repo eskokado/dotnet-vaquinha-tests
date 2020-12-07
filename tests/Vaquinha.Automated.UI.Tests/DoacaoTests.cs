@@ -83,7 +83,6 @@ namespace Vaquinha.AutomatedUITests
 
 			_driver.FindElement(By.Id("DadosPessoais_Nome")).SendKeys(doacao.DadosPessoais.Nome);
 			_driver.FindElement(By.Id("DadosPessoais_Email")).SendKeys(doacao.DadosPessoais.Email);
-			_driver.FindElement(By.Id("DadosPessoais_Nome")).SendKeys(doacao.DadosPessoais.Nome);
 
 			_driver.FindElement(By.Id("EnderecoCobranca_TextoEndereco")).SendKeys(doacao.EnderecoCobranca.TextoEndereco);
 			_driver.FindElement(By.Id("EnderecoCobranca_Numero")).SendKeys(doacao.EnderecoCobranca.Numero);
@@ -98,6 +97,21 @@ namespace Vaquinha.AutomatedUITests
 			_driver.FindElement(By.Id("cvv")).SendKeys(doacao.FormaPagamento.CVV);
 
 			// Assert
+			_driver.FindElement(By.Id("DadosPessoais_Nome")).GetAttribute("value").Should().Contain(doacao.DadosPessoais.Nome);
+			_driver.FindElement(By.Id("DadosPessoais_Email")).GetAttribute("value").Should().Contain(doacao.DadosPessoais.Email);
+
+			_driver.FindElement(By.Id("EnderecoCobranca_TextoEndereco")).GetAttribute("value").Should().Contain(doacao.EnderecoCobranca.TextoEndereco);
+			_driver.FindElement(By.Id("EnderecoCobranca_Numero")).GetAttribute("value").Should().Contain(doacao.EnderecoCobranca.Numero);
+			_driver.FindElement(By.Id("EnderecoCobranca_Cidade")).GetAttribute("value").Should().Contain(doacao.EnderecoCobranca.Cidade);
+			_driver.FindElement(By.Id("estado")).GetAttribute("value").Should().Contain(doacao.EnderecoCobranca.Estado);
+			_driver.FindElement(By.Id("cep")).GetAttribute("value").Should().Contain(doacao.EnderecoCobranca.CEP);
+			_driver.FindElement(By.Id("telefone")).GetAttribute("value").Should().Contain(doacao.EnderecoCobranca.Telefone.Substring(1, 2));
+
+			_driver.FindElement(By.Id("FormaPagamento_NomeTitular")).GetAttribute("value").Should().Contain(doacao.FormaPagamento.NomeTitular);
+			_driver.FindElement(By.Id("cardNumber")).GetAttribute("value").Should().Contain(doacao.FormaPagamento.NumeroCartaoCredito.Substring(0, 4));
+			_driver.FindElement(By.Id("validade")).GetAttribute("value").Should().Contain(doacao.FormaPagamento.Validade);
+			_driver.FindElement(By.Id("cvv")).GetAttribute("value").Should().Contain(doacao.FormaPagamento.CVV);
+
 			_driver.Url.Should().Contain("/Doacoes/Create");
 		}
 	}
